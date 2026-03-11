@@ -1,0 +1,2 @@
+SELECT real_time, node_id, sensor_type, value 
+FROM logs ORDER BY id DESC LIMIT 18;

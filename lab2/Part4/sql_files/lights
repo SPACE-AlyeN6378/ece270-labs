@@ -1,0 +1,5 @@
+SELECT SUM(value)
+FROM logs
+WHERE sensor_type = 'lights'
+AND node_id = 'room1'
+ORDER BY id DESC LIMIT 60;
