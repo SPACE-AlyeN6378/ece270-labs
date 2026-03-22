@@ -1,0 +1,4 @@
+SELECT SUM(value)
+FROM logs
+WHERE node_id = 'livingroom'
+AND sensor_type = 'lights';

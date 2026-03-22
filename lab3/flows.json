@@ -1,0 +1,1031 @@
+[
+    {
+        "id": "243dca7834ad8931",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "e339874096f904ea",
+        "type": "ui_switch",
+        "z": "243dca7834ad8931",
+        "name": "",
+        "label": "room1",
+        "tooltip": "",
+        "group": "e7f60cc9aac39d54",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "decouple": "false",
+        "topic": "ece270/lab3/control",
+        "topicType": "str",
+        "style": "",
+        "onvalue": "room1:on",
+        "onvalueType": "str",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "room1:off",
+        "offvalueType": "str",
+        "officon": "",
+        "offcolor": "",
+        "animate": false,
+        "className": "",
+        "x": 1030,
+        "y": 40,
+        "wires": [
+            [
+                "876320f84701d726"
+            ]
+        ]
+    },
+    {
+        "id": "876320f84701d726",
+        "type": "mqtt out",
+        "z": "243dca7834ad8931",
+        "name": "control",
+        "topic": "control",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "421cae34647bc182",
+        "x": 1290,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "0f663c8d3bd5d41d",
+        "type": "ui_gauge",
+        "z": "243dca7834ad8931",
+        "name": "",
+        "group": "71ef90d96889a224",
+        "order": 1,
+        "width": 6,
+        "height": 4,
+        "gtype": "gage",
+        "title": "Temperature",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": "18",
+        "max": "30",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "0",
+        "seg2": "10",
+        "diff": false,
+        "className": "",
+        "x": 910,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "eddeabf3567b1d15",
+        "type": "mqtt in",
+        "z": "243dca7834ad8931",
+        "name": "status",
+        "topic": "logging",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "1f7e1c40eabaa45f",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 110,
+        "y": 300,
+        "wires": [
+            [
+                "f31362003767fda4",
+                "0f462423f6032931",
+                "e67787ab4811845b",
+                "6f5a29bc8d267e39"
+            ]
+        ]
+    },
+    {
+        "id": "f7fe2b211374ff0d",
+        "type": "change",
+        "z": "243dca7834ad8931",
+        "name": "thermostat",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.status",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 630,
+        "y": 220,
+        "wires": [
+            [
+                "0f663c8d3bd5d41d"
+            ]
+        ]
+    },
+    {
+        "id": "f31362003767fda4",
+        "type": "switch",
+        "z": "243dca7834ad8931",
+        "name": "switcher",
+        "property": "payload.node",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "room1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "thermostat",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "room2",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "living_room",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "garage",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 5,
+        "x": 360,
+        "y": 280,
+        "wires": [
+            [
+                "dab842cbbfbef5b5"
+            ],
+            [
+                "f7fe2b211374ff0d"
+            ],
+            [
+                "bdf4c973bc91194f"
+            ],
+            [
+                "9948b4af83be5af7"
+            ],
+            [
+                "83e5be61c7f141b3"
+            ]
+        ]
+    },
+    {
+        "id": "dab842cbbfbef5b5",
+        "type": "change",
+        "z": "243dca7834ad8931",
+        "name": "room1",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.status",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 610,
+        "y": 140,
+        "wires": [
+            [
+                "ece7e3937413eda0"
+            ]
+        ]
+    },
+    {
+        "id": "0f462423f6032931",
+        "type": "function",
+        "z": "243dca7834ad8931",
+        "name": "parse_stats",
+        "func": "//complete the code\nconst devices = {\n    \"room1\": { power: 10 },// Blue\n    \"room2\": { power: 10 },       // Green\n    \"living_room\": { power: 20 }, // White\n    \"garage\": { power: 5 }        // Red\n};\n\n\nlet currentStats = flow.get(\"energyStats\") || {};\n\nlet nodeName = msg.payload.node;\nlet status = msg.payload.status === \"on\" ? 1 : 0;\n\nif (nodeName && devices[nodeName]) {\n    currentStats[nodeName] = status * devices[nodeName].power;\n}\nflow.set(\"energyStats\", currentStats);\n\n\nlet labels = Object.keys(currentStats);\nlet data = Object.values(currentStats);\n\n\nlet totalWatts = data.reduce((a, b) => a + b, 0);\n\n// PIECHART FORMAT FOR OLDER DASHBOARD\nmsg.payload = [{\n    series: labels,\n    data: [data],\n    labels: labels\n}];\n\n\nreturn [\n    msg,\n    { payload: totalWatts + \" W\" }\n];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is started.\n//not needed",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 400,
+        "wires": [
+            [
+                "16bd62b6a2b1d003"
+            ],
+            [
+                "051e21869912022a"
+            ]
+        ]
+    },
+    {
+        "id": "16bd62b6a2b1d003",
+        "type": "ui_chart",
+        "z": "243dca7834ad8931",
+        "name": "",
+        "group": "f6be1988c918519f",
+        "order": 1,
+        "width": 8,
+        "height": 4,
+        "label": "Total Energy Use",
+        "chartType": "pie",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "0 W",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "50",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#0000ff",
+            "#00ff00",
+            "#dbf9ff",
+            "#ff0000",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 690,
+        "y": 400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e67787ab4811845b",
+        "type": "function",
+        "z": "243dca7834ad8931",
+        "name": "dates",
+        "func": "const now = new Date();\nmsg.payload = now.toLocaleDateString() + \" \" + now.toLocaleTimeString();\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 170,
+        "y": 120,
+        "wires": [
+            [
+                "59460c84cfd0730f"
+            ]
+        ]
+    },
+    {
+        "id": "cd7146bfaa84bbbc",
+        "type": "inject",
+        "z": "243dca7834ad8931",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "5",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 230,
+        "y": 780,
+        "wires": [
+            [
+                "36365e404afce014",
+                "e930b4b65dec331d",
+                "07919c3aacc6528f"
+            ]
+        ]
+    },
+    {
+        "id": "36365e404afce014",
+        "type": "sqlite",
+        "z": "243dca7834ad8931",
+        "mydb": "5eea51667e83c333",
+        "sqlquery": "fixed",
+        "sql": "SELECT * FROM logs WHERE counter = (SELECT MAX(counter) FROM logs)",
+        "name": "DB",
+        "x": 490,
+        "y": 780,
+        "wires": [
+            [
+                "b34c1bdfc50bef36"
+            ]
+        ]
+    },
+    {
+        "id": "b34c1bdfc50bef36",
+        "type": "ui_table",
+        "z": "243dca7834ad8931",
+        "group": "0b5fdd247b039aa9",
+        "name": "MOST RECENT DATA (5)",
+        "order": 1,
+        "width": 6,
+        "height": 3,
+        "columns": [],
+        "outputs": 0,
+        "cts": false,
+        "x": 790,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "59460c84cfd0730f",
+        "type": "ui_text",
+        "z": "243dca7834ad8931",
+        "group": "c318f0e7275cbf84",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "className": "",
+        "style": true,
+        "font": "",
+        "fontSize": "19",
+        "color": "#a561d2",
+        "x": 350,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "5cf9165f41cb3f14",
+        "type": "sqlite",
+        "z": "243dca7834ad8931",
+        "mydb": "5eea51667e83c333",
+        "sqlquery": "msg.topic",
+        "sql": "",
+        "name": "DB1",
+        "x": 850,
+        "y": 600,
+        "wires": [
+            [
+                "14670126386e2426"
+            ]
+        ]
+    },
+    {
+        "id": "6f5a29bc8d267e39",
+        "type": "ui_dropdown",
+        "z": "243dca7834ad8931",
+        "name": "",
+        "label": "select light",
+        "tooltip": "",
+        "place": "Select option",
+        "group": "0b774200be49a676",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "multiple": false,
+        "options": [
+            {
+                "label": "room1",
+                "value": "room1",
+                "type": "str"
+            },
+            {
+                "label": "room2",
+                "value": "room2",
+                "type": "str"
+            },
+            {
+                "label": "living_room",
+                "value": "living_room",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "x": 390,
+        "y": 600,
+        "wires": [
+            [
+                "d80aefbddcb7a178"
+            ]
+        ]
+    },
+    {
+        "id": "d80aefbddcb7a178",
+        "type": "function",
+        "z": "243dca7834ad8931",
+        "name": "ProcessQuery",
+        "func": "//write the QUERY\n// use \"${msg.payload}\" to use node_ids coming from the selecc light drop down menu\nmsg.topic = `SELECT SUM(value) FROM logs WHERE node_id = \"${msg.payload}\" AND sensor_type = \"lights\";`;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 640,
+        "y": 600,
+        "wires": [
+            [
+                "5cf9165f41cb3f14"
+            ]
+        ]
+    },
+    {
+        "id": "326ef06b21c81a6b",
+        "type": "ui_switch",
+        "z": "243dca7834ad8931",
+        "name": "",
+        "label": "room2",
+        "tooltip": "",
+        "group": "e7f60cc9aac39d54",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "decouple": "false",
+        "topic": "ece270/lab3/control",
+        "topicType": "str",
+        "style": "",
+        "onvalue": "room2:on",
+        "onvalueType": "str",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "room2:off",
+        "offvalueType": "str",
+        "officon": "",
+        "offcolor": "",
+        "animate": false,
+        "className": "",
+        "x": 1030,
+        "y": 80,
+        "wires": [
+            [
+                "876320f84701d726"
+            ]
+        ]
+    },
+    {
+        "id": "5c86494edecab638",
+        "type": "ui_button",
+        "z": "243dca7834ad8931",
+        "name": "",
+        "group": "e7f60cc9aac39d54",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Turn off alarm",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "alarm:off",
+        "payloadType": "str",
+        "topic": "ece270/lab3/control",
+        "topicType": "str",
+        "x": 1060,
+        "y": 120,
+        "wires": [
+            [
+                "876320f84701d726"
+            ]
+        ]
+    },
+    {
+        "id": "ece7e3937413eda0",
+        "type": "ui_led",
+        "z": "243dca7834ad8931",
+        "order": 1,
+        "group": "503dbe5d37999a10",
+        "width": 0,
+        "height": 0,
+        "label": "Room 1 Lights",
+        "labelPlacement": "left",
+        "labelAlignment": "left",
+        "colorForValue": [
+            {
+                "color": "#016cf9",
+                "value": "on",
+                "valueType": "str"
+            }
+        ],
+        "allowColorForValueInMessage": false,
+        "shape": "circle",
+        "showGlow": true,
+        "name": "",
+        "x": 890,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "899bbf28b0e11732",
+        "type": "ui_led",
+        "z": "243dca7834ad8931",
+        "order": 2,
+        "group": "503dbe5d37999a10",
+        "width": 0,
+        "height": 0,
+        "label": "Room 2 Lights",
+        "labelPlacement": "left",
+        "labelAlignment": "left",
+        "colorForValue": [
+            {
+                "color": "#00ff00",
+                "value": "on",
+                "valueType": "str"
+            }
+        ],
+        "allowColorForValueInMessage": false,
+        "shape": "circle",
+        "showGlow": true,
+        "name": "",
+        "x": 890,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "bdf4c973bc91194f",
+        "type": "change",
+        "z": "243dca7834ad8931",
+        "name": "room2",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.status",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 610,
+        "y": 180,
+        "wires": [
+            [
+                "899bbf28b0e11732"
+            ]
+        ]
+    },
+    {
+        "id": "9948b4af83be5af7",
+        "type": "change",
+        "z": "243dca7834ad8931",
+        "name": "living_room",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.status",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 630,
+        "y": 260,
+        "wires": [
+            [
+                "cf770ceccc3c7cc3"
+            ]
+        ]
+    },
+    {
+        "id": "cf770ceccc3c7cc3",
+        "type": "ui_led",
+        "z": "243dca7834ad8931",
+        "order": 3,
+        "group": "503dbe5d37999a10",
+        "width": 0,
+        "height": 0,
+        "label": "Living Room",
+        "labelPlacement": "left",
+        "labelAlignment": "left",
+        "colorForValue": [
+            {
+                "color": "#ffffff",
+                "value": "on",
+                "valueType": "str"
+            }
+        ],
+        "allowColorForValueInMessage": false,
+        "shape": "circle",
+        "showGlow": true,
+        "name": "",
+        "x": 890,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "83e5be61c7f141b3",
+        "type": "change",
+        "z": "243dca7834ad8931",
+        "name": "garage",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.status",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 620,
+        "y": 300,
+        "wires": [
+            [
+                "0d16bb84f0a4aa77"
+            ]
+        ]
+    },
+    {
+        "id": "0d16bb84f0a4aa77",
+        "type": "ui_led",
+        "z": "243dca7834ad8931",
+        "order": 4,
+        "group": "503dbe5d37999a10",
+        "width": 0,
+        "height": 0,
+        "label": "Alarm",
+        "labelPlacement": "left",
+        "labelAlignment": "left",
+        "colorForValue": [
+            {
+                "color": "#ff0000",
+                "value": "on",
+                "valueType": "str"
+            }
+        ],
+        "allowColorForValueInMessage": false,
+        "shape": "circle",
+        "showGlow": true,
+        "name": "",
+        "x": 890,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "051e21869912022a",
+        "type": "ui_text",
+        "z": "243dca7834ad8931",
+        "group": "f6be1988c918519f",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "total",
+        "format": "Total Energy: {{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 650,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "14670126386e2426",
+        "type": "function",
+        "z": "243dca7834ad8931",
+        "name": "parse time",
+        "func": "let value = msg.payload[0][\"SUM(value)\"];\n\nlet minutes = Math.floor(value / 60);\nlet seconds = value % 60;\nmsg.payload = `${minutes}m ${seconds}s`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1050,
+        "y": 600,
+        "wires": [
+            [
+                "4fc586c149e67d23"
+            ]
+        ]
+    },
+    {
+        "id": "4fc586c149e67d23",
+        "type": "ui_text",
+        "z": "243dca7834ad8931",
+        "group": "0b774200be49a676",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Time",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 1250,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "07919c3aacc6528f",
+        "type": "sqlite",
+        "z": "243dca7834ad8931",
+        "mydb": "5eea51667e83c333",
+        "sqlquery": "fixed",
+        "sql": "SELECT real_time, node_id, value\nFROM logs\nWHERE sensor_type = \"alarm\"\nAND value = 1\nORDER BY real_time DESC\nLIMIT 10;",
+        "name": "DB2: Alarm",
+        "x": 510,
+        "y": 700,
+        "wires": [
+            [
+                "2b048b4ee5f9db9f"
+            ]
+        ]
+    },
+    {
+        "id": "2b048b4ee5f9db9f",
+        "type": "ui_table",
+        "z": "243dca7834ad8931",
+        "group": "d9a5852f4fd9d772",
+        "name": "Query",
+        "order": 1,
+        "width": 6,
+        "height": 6,
+        "columns": [],
+        "outputs": 0,
+        "cts": false,
+        "x": 730,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "e930b4b65dec331d",
+        "type": "sqlite",
+        "z": "243dca7834ad8931",
+        "mydb": "5eea51667e83c333",
+        "sqlquery": "fixed",
+        "sql": "SELECT DATE(real_time) AS day,\n\tROUND(AVG(value), 2) AS avg_daily_temp\nFROM logs\nWHERE sensor_type = 'temperature'\nGROUP BY DATE(real_time)\nORDER BY day;",
+        "name": "DB3: Temperature",
+        "x": 530,
+        "y": 860,
+        "wires": [
+            [
+                "32aac145bf67fc27"
+            ]
+        ]
+    },
+    {
+        "id": "32aac145bf67fc27",
+        "type": "ui_table",
+        "z": "243dca7834ad8931",
+        "group": "4cda0cc1b071b240",
+        "name": "Table of Temperatures",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "columns": [],
+        "outputs": 0,
+        "cts": false,
+        "x": 820,
+        "y": 860,
+        "wires": []
+    },
+    {
+        "id": "e7f60cc9aac39d54",
+        "type": "ui_group",
+        "name": "Room Switches",
+        "tab": "3318f40d96795a52",
+        "order": 4,
+        "disp": true,
+        "width": 7,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "421cae34647bc182",
+        "type": "mqtt-broker",
+        "name": "Pico - control",
+        "broker": "10.42.0.1",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "71ef90d96889a224",
+        "type": "ui_group",
+        "name": "Thermostat",
+        "tab": "3318f40d96795a52",
+        "order": 5,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "1f7e1c40eabaa45f",
+        "type": "mqtt-broker",
+        "name": "pico - status",
+        "broker": "10.42.0.1",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "f6be1988c918519f",
+        "type": "ui_group",
+        "name": "STATS",
+        "tab": "3318f40d96795a52",
+        "order": 6,
+        "disp": true,
+        "width": 8,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "5eea51667e83c333",
+        "type": "sqlitedb",
+        "db": "/home/ece270/lab3/lab2/lab2_files/Part4/home_system.db",
+        "mode": "RWC"
+    },
+    {
+        "id": "0b5fdd247b039aa9",
+        "type": "ui_group",
+        "name": "Most Recent Data",
+        "tab": "3318f40d96795a52",
+        "order": 7,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "c318f0e7275cbf84",
+        "type": "ui_group",
+        "name": "Date",
+        "tab": "3318f40d96795a52",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "0b774200be49a676",
+        "type": "ui_group",
+        "name": "Trend 1: How long was a light turned on for",
+        "tab": "3318f40d96795a52",
+        "order": 8,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "503dbe5d37999a10",
+        "type": "ui_group",
+        "name": "Rooms",
+        "tab": "3318f40d96795a52",
+        "order": 2,
+        "disp": true,
+        "width": 7,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "d9a5852f4fd9d772",
+        "type": "ui_group",
+        "name": "Trend 2: Recent Alarms",
+        "tab": "3318f40d96795a52",
+        "order": 8,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "4cda0cc1b071b240",
+        "type": "ui_group",
+        "name": "Trend 3: Average Daily Temperatures",
+        "tab": "3318f40d96795a52",
+        "order": 9,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "3318f40d96795a52",
+        "type": "ui_tab",
+        "name": "Home Control",
+        "icon": "",
+        "disabled": false,
+        "hidden": false,
+        "info": "Dashboard for Home Automation System"
+    },
+    {
+        "id": "c23a151c275b01d0",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-dashboard": "3.6.6",
+            "node-red-node-sqlite": "1.1.1",
+            "node-red-node-ui-table": "0.4.5",
+            "node-red-contrib-ui-led": "0.4.11"
+        }
+    }
+]

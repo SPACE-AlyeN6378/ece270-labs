@@ -1,0 +1,4 @@
+SELECT real_time, node_id, value 
+FROM logs
+WHERE sensor_type = 'alarm'
+AND value = 1;
